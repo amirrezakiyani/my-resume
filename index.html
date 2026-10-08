@@ -1,0 +1,1131 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>امیررضا کیانی | مهندس برق کنترل</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Estedad:wght@300;400;500;600;700;800;900&family=Vazirmatn:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+  :root {
+    --primary: #6366f1;
+    --primary-light: #818cf8;
+    --primary-dark: #4f46e5;
+    --accent: #06b6d4;
+    --accent-2: #ec4899;
+    --accent-3: #f59e0b;
+    --bg: #ffffff;
+    --bg-alt: #f8fafc;
+    --text: #0f172a;
+    --text-muted: #64748b;
+    --border: #e2e8f0;
+    --glass: rgba(255,255,255,0.7);
+    --glass-border: rgba(255,255,255,0.3);
+    --shadow: 0 10px 30px rgba(0,0,0,0.06);
+    --shadow-lg: 0 20px 50px rgba(99,102,241,0.15);
+    --glow: 0 0 30px rgba(99,102,241,0.4);
+  }
+
+  [data-theme="dark"] {
+    --bg: #0a0e1a;
+    --bg-alt: #111827;
+    --text: #f1f5f9;
+    --text-muted: #94a3b8;
+    --border: #1e293b;
+    --glass: rgba(17,24,39,0.6);
+    --glass-border: rgba(255,255,255,0.08);
+    --shadow: 0 10px 30px rgba(0,0,0,0.4);
+    --shadow-lg: 0 20px 50px rgba(99,102,241,0.3);
+    --glow: 0 0 40px rgba(99,102,241,0.6);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Estedad', 'Vazirmatn', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.9;
+    transition: background 0.3s, color 0.3s;
+    overflow-x: hidden;
+  }
+
+  /* اسکرول‌بار سفارشی */
+  ::-webkit-scrollbar { width: 10px; }
+  ::-webkit-scrollbar-track { background: var(--bg-alt); }
+  ::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, var(--primary), var(--accent-2));
+    border-radius: 10px;
+  }
+  ::-webkit-scrollbar-thumb:hover { background: var(--primary-dark); }
+
+  /* نوار پیشرفت اسکرول */
+  .scroll-progress {
+    position: fixed; top: 0; right: 0; left: 0;
+    height: 3px; z-index: 9999;
+    background: transparent;
+  }
+  .scroll-progress-bar {
+    height: 100%; width: 0;
+    background: linear-gradient(to left, var(--primary), var(--accent-2), var(--accent));
+    transition: width 0.1s;
+    box-shadow: 0 0 10px var(--primary);
+  }
+
+  /* نوار ناوبری */
+  nav {
+    position: fixed; top: 0; right: 0; left: 0;
+    background: var(--glass);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border-bottom: 1px solid var(--glass-border);
+    z-index: 1000; padding: 15px 0;
+    transition: all 0.3s;
+  }
+
+  .nav-container {
+    max-width: 1200px; margin: 0 auto; padding: 0 25px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+
+  .logo {
+    font-size: 1.4rem; font-weight: 900; letter-spacing: -0.5px;
+    background: linear-gradient(135deg, var(--primary), var(--accent-2));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .nav-links { display: flex; gap: 28px; list-style: none; }
+  .nav-links a {
+    color: var(--text-muted); text-decoration: none;
+    font-size: 0.95rem; font-weight: 500;
+    transition: color 0.3s; position: relative;
+  }
+  .nav-links a:hover { color: var(--primary); }
+  .nav-links a::after {
+    content: ''; position: absolute; bottom: -6px; right: 0;
+    width: 0; height: 2px;
+    background: linear-gradient(to left, var(--primary), var(--accent-2));
+    transition: width 0.3s; border-radius: 2px;
+  }
+  .nav-links a:hover::after { width: 100%; }
+
+  .theme-toggle {
+    background: var(--glass); border: 1px solid var(--border);
+    width: 42px; height: 42px; border-radius: 50%; cursor: pointer;
+    font-size: 1rem; color: var(--text);
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.3s;
+  }
+  .theme-toggle:hover {
+    transform: rotate(20deg) scale(1.1);
+    background: var(--primary); color: white;
+    border-color: var(--primary);
+    box-shadow: var(--glow);
+  }
+
+  /* هدر */
+  .hero {
+    min-height: 100vh; display: flex; align-items: center; justify-content: center;
+    text-align: center; padding: 100px 25px 60px;
+    position: relative; overflow: hidden;
+    background: var(--bg);
+  }
+
+  .hero-bg { position: absolute; inset: 0; z-index: 0; overflow: hidden; }
+  .hero-bg span {
+    position: absolute; border-radius: 50%;
+    filter: blur(100px); opacity: 0.5;
+  }
+  .hero-bg span:nth-child(1) {
+    width: 550px; height: 550px;
+    background: #6366f1;
+    top: -180px; right: -120px;
+    animation: float1 14s ease-in-out infinite;
+  }
+  .hero-bg span:nth-child(2) {
+    width: 500px; height: 500px;
+    background: #ec4899;
+    bottom: -120px; left: -120px;
+    animation: float2 16s ease-in-out infinite;
+  }
+  .hero-bg span:nth-child(3) {
+    width: 450px; height: 450px;
+    background: #06b6d4;
+    top: 35%; left: 45%;
+    animation: float3 18s ease-in-out infinite;
+  }
+  [data-theme="dark"] .hero-bg span { opacity: 0.35; }
+
+  @keyframes float1 {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(-60px, 60px) scale(1.15); }
+  }
+  @keyframes float2 {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(60px, -60px) scale(1.15); }
+  }
+  @keyframes float3 {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(-40px, 40px) scale(1.2); }
+  }
+
+  .hero-content { position: relative; z-index: 2; animation: fadeInUp 1s ease; }
+
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .avatar-wrapper { position: relative; display: inline-block; margin-bottom: 30px; }
+  .avatar-wrapper::before {
+    content: ''; position: absolute; inset: -12px; border-radius: 50%;
+    background: conic-gradient(from 0deg, var(--primary), var(--accent-2), var(--accent), var(--accent-3), var(--primary));
+    z-index: -1; animation: spin 8s linear infinite;
+    filter: blur(3px);
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .avatar {
+    width: 190px; height: 190px; border-radius: 50%;
+    border: 6px solid var(--bg); object-fit: cover;
+    display: block; background: var(--bg-alt);
+    box-shadow: 0 25px 50px rgba(0,0,0,0.2);
+  }
+
+  .hero h1 {
+    font-size: clamp(2.2rem, 5.5vw, 4rem);
+    font-weight: 900; margin-bottom: 15px; line-height: 1.3;
+    letter-spacing: -1.5px;
+  }
+
+  .gradient-text {
+    background: linear-gradient(135deg, var(--primary), var(--accent-2), var(--accent));
+    background-size: 200% 200%;
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: gradientMove 4s ease infinite;
+  }
+  @keyframes gradientMove {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
+
+  .hero .tagline {
+    font-size: clamp(1rem, 2vw, 1.3rem);
+    color: var(--text-muted); margin-bottom: 20px;
+    font-weight: 400;
+  }
+
+  .hero-badges {
+    display: flex; gap: 10px; justify-content: center;
+    flex-wrap: wrap; margin-bottom: 30px;
+  }
+  .badge {
+    padding: 8px 18px; border-radius: 50px;
+    background: var(--glass);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+    font-size: 0.85rem; font-weight: 600;
+    color: var(--text-muted);
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .badge i { color: var(--primary); }
+
+  .hero-buttons {
+    display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;
+  }
+
+  .btn {
+    padding: 15px 34px; border-radius: 50px; text-decoration: none;
+    font-weight: 600; font-size: 0.95rem; transition: all 0.3s;
+    display: inline-flex; align-items: center; gap: 10px;
+    cursor: pointer; border: none; font-family: inherit;
+    position: relative; overflow: hidden;
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: white;
+    box-shadow: 0 10px 25px rgba(99,102,241,0.4);
+  }
+  .btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 40px rgba(99,102,241,0.6), var(--glow);
+  }
+
+  .btn-outline {
+    background: var(--glass);
+    color: var(--text);
+    border: 2px solid var(--border);
+    backdrop-filter: blur(10px);
+  }
+  .btn-outline:hover {
+    border-color: var(--primary); color: var(--primary);
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(99,102,241,0.2);
+  }
+
+  /* بخش‌ها */
+  section { padding: 100px 25px; position: relative; }
+  .container { max-width: 1200px; margin: 0 auto; }
+
+  .section-title {
+    font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+    font-weight: 900; margin-bottom: 15px; text-align: center;
+    letter-spacing: -0.5px;
+  }
+
+  .section-subtitle {
+    text-align: center; color: var(--text-muted);
+    margin-bottom: 60px; font-size: 1.05rem;
+  }
+
+  /* درباره من */
+  #about { background: var(--bg-alt); }
+  .about-content {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 60px; align-items: center;
+  }
+  .about-text p {
+    margin-bottom: 18px; color: var(--text-muted);
+    font-size: 1.05rem; line-height: 2;
+  }
+  .about-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+
+  .stat-card {
+    background: var(--glass);
+    backdrop-filter: blur(20px);
+    padding: 30px 20px; border-radius: 24px;
+    text-align: center;
+    border: 1px solid var(--glass-border);
+    transition: all 0.4s; position: relative; overflow: hidden;
+  }
+  .stat-card::before {
+    content: ''; position: absolute; top: 0; right: 0;
+    width: 100%; height: 4px;
+    background: linear-gradient(to left, var(--primary), var(--accent-2));
+    transform: scaleX(0); transform-origin: right;
+    transition: transform 0.4s;
+  }
+  .stat-card:hover::before { transform: scaleX(1); }
+  .stat-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--primary);
+  }
+
+  .stat-icon {
+    font-size: 1.8rem; margin-bottom: 12px;
+    background: linear-gradient(135deg, var(--primary), var(--accent-2));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .stat-number {
+    font-size: 2.5rem; font-weight: 900;
+    background: linear-gradient(135deg, var(--primary), var(--accent-2));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: -1px; line-height: 1.2;
+  }
+  .stat-label { color: var(--text-muted); font-size: 0.9rem; margin-top: 5px; }
+
+  /* مهارت‌ها */
+  .skills-layout {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 50px; align-items: center;
+  }
+
+  .chart-wrapper {
+    background: var(--glass);
+    backdrop-filter: blur(20px);
+    padding: 30px; border-radius: 24px;
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--shadow);
+    position: relative; height: 450px;
+  }
+
+  .skills-list { display: flex; flex-direction: column; gap: 22px; }
+
+  .skill-item {
+    background: var(--glass);
+    backdrop-filter: blur(20px);
+    padding: 22px; border-radius: 18px;
+    border: 1px solid var(--glass-border);
+    transition: all 0.3s;
+    position: relative; overflow: hidden;
+  }
+  .skill-item:hover {
+    transform: translateX(-5px);
+    box-shadow: var(--shadow);
+    border-color: var(--primary);
+  }
+
+  .skill-header {
+    display: flex; justify-content: space-between;
+    margin-bottom: 12px; font-weight: 600;
+    align-items: center;
+  }
+
+  .skill-name {
+    display: flex; align-items: center; gap: 10px;
+  }
+  .skill-name i {
+    color: var(--primary);
+    font-size: 1.1rem;
+    width: 24px; text-align: center;
+  }
+
+  .skill-percent {
+    color: var(--primary);
+    font-size: 0.9rem; font-weight: 700;
+  }
+
+  .skill-bar {
+    background: var(--bg-alt);
+    height: 8px; border-radius: 10px; overflow: hidden;
+  }
+  .skill-fill {
+    height: 100%;
+    background: linear-gradient(to left, var(--primary), var(--accent-2));
+    border-radius: 10px; width: 0;
+    transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+  }
+  .skill-fill::after {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+    animation: shimmer 2s infinite;
+  }
+  @keyframes shimmer {
+    from { transform: translateX(-100%); }
+    to { transform: translateX(100%); }
+  }
+
+  /* خدمات */
+  #services { background: var(--bg-alt); }
+
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 25px;
+  }
+
+  .service-card {
+    background: var(--glass);
+    backdrop-filter: blur(20px);
+    padding: 35px 25px;
+    border-radius: 24px;
+    border: 1px solid var(--glass-border);
+    transition: all 0.4s;
+    position: relative; overflow: hidden;
+  }
+  .service-card::before {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(135deg, var(--primary), var(--accent-2));
+    opacity: 0; transition: opacity 0.4s;
+    z-index: 0;
+  }
+  .service-card:hover::before { opacity: 0.05; }
+  .service-card:hover {
+    transform: translateY(-10px);
+    border-color: var(--primary);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .service-icon {
+    width: 65px; height: 65px;
+    border-radius: 18px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.6rem; color: white;
+    background: linear-gradient(135deg, var(--primary), var(--accent-2));
+    box-shadow: 0 10px 25px rgba(99,102,241,0.3);
+    margin-bottom: 20px;
+    transition: transform 0.4s;
+    position: relative; z-index: 1;
+  }
+  .service-card:hover .service-icon {
+    transform: scale(1.1) rotate(-8deg);
+  }
+
+  .service-card h3 {
+    font-size: 1.15rem; margin-bottom: 10px;
+    font-weight: 700; position: relative; z-index: 1;
+  }
+  .service-card p {
+    color: var(--text-muted); font-size: 0.9rem;
+    line-height: 1.8; position: relative; z-index: 1;
+  }
+
+  /* پروژه‌ها */
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 28px;
+  }
+
+  .project-card {
+    background: var(--glass);
+    backdrop-filter: blur(20px);
+    border-radius: 24px; overflow: hidden;
+    border: 1px solid var(--glass-border);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    text-decoration: none; color: var(--text);
+    display: block; position: relative;
+  }
+  .project-card:hover {
+    transform: translateY(-12px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--primary);
+  }
+
+  .project-image {
+    height: 180px;
+    background: linear-gradient(135deg, var(--primary), var(--accent-2));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 3.5rem; color: white;
+    position: relative; overflow: hidden;
+  }
+  .project-image::before {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(135deg, transparent 40%, rgba(0,0,0,0.2));
+  }
+  .project-image i {
+    position: relative; z-index: 2;
+    filter: drop-shadow(0 4px 10px rgba(0,0,0,0.3));
+    transition: transform 0.4s;
+  }
+  .project-card:hover .project-image i {
+    transform: scale(1.2) rotate(-5deg);
+  }
+
+  .project-card:nth-child(6n+2) .project-image { background: linear-gradient(135deg, #06b6d4, #3b82f6); }
+  .project-card:nth-child(6n+3) .project-image { background: linear-gradient(135deg, #f59e0b, #ef4444); }
+  .project-card:nth-child(6n+4) .project-image { background: linear-gradient(135deg, #8b5cf6, #ec4899); }
+  .project-card:nth-child(6n+5) .project-image { background: linear-gradient(135deg, #10b981, #06b6d4); }
+  .project-card:nth-child(6n+6) .project-image { background: linear-gradient(135deg, #ef4444, #f59e0b); }
+
+  .project-body { padding: 25px; }
+  .project-body h3 {
+    font-size: 1.15rem; margin-bottom: 10px;
+    font-weight: 700;
+  }
+  .project-body p {
+    color: var(--text-muted); font-size: 0.88rem;
+    margin-bottom: 18px; line-height: 1.8;
+  }
+  .project-tags { display: flex; gap: 8px; flex-wrap: wrap; }
+  .tag {
+    background: var(--bg-alt); color: var(--primary);
+    padding: 5px 14px; border-radius: 20px;
+    font-size: 0.72rem; font-weight: 600;
+    border: 1px solid var(--border);
+  }
+
+  .project-arrow {
+    position: absolute; top: 20px; left: 20px;
+    width: 42px; height: 42px; border-radius: 50%;
+    background: rgba(255,255,255,0.25);
+    backdrop-filter: blur(10px);
+    display: flex; align-items: center; justify-content: center;
+    color: white;
+    opacity: 0; transform: translateY(-10px);
+    transition: all 0.3s;
+  }
+  .project-card:hover .project-arrow {
+    opacity: 1; transform: translateY(0);
+  }
+
+  /* تماس */
+  #contact { background: var(--bg-alt); }
+
+  .contact-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 22px; max-width: 1100px; margin: 0 auto;
+  }
+
+  .contact-card {
+    background: var(--glass);
+    backdrop-filter: blur(20px);
+    padding: 35px 20px;
+    border-radius: 20px;
+    text-align: center;
+    text-decoration: none;
+    color: var(--text);
+    border: 1px solid var(--glass-border);
+    transition: all 0.4s;
+    position: relative; overflow: hidden;
+  }
+  .contact-card:hover {
+    transform: translateY(-10px);
+    border-color: var(--primary);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .contact-icon {
+    width: 65px; height: 65px;
+    margin: 0 auto 15px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.6rem;
+    background: linear-gradient(135deg, var(--primary), var(--accent-2));
+    color: white;
+    box-shadow: 0 10px 25px rgba(99,102,241,0.3);
+    transition: transform 0.4s;
+  }
+  .contact-card:hover .contact-icon {
+    transform: scale(1.15) rotate(-10deg);
+  }
+
+  .contact-card h4 {
+    font-size: 1rem; margin-bottom: 6px;
+    font-weight: 700;
+  }
+  .contact-card p {
+    font-size: 0.85rem; color: var(--text-muted);
+    direction: ltr;
+  }
+
+  /* فوتر */
+  footer {
+    background: var(--bg);
+    padding: 40px 25px;
+    text-align: center;
+    border-top: 1px solid var(--border);
+    color: var(--text-muted);
+    font-size: 0.9rem;
+  }
+  footer .heart {
+    color: var(--accent-2);
+    animation: heartbeat 1.5s infinite;
+    display: inline-block;
+  }
+  @keyframes heartbeat {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+  }
+
+  /* دکمه برگشت */
+  .scroll-top {
+    position: fixed; bottom: 30px; left: 30px;
+    width: 52px; height: 52px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary), var(--accent-2));
+    color: white; border: none; cursor: pointer;
+    font-size: 1.1rem;
+    box-shadow: 0 10px 25px rgba(99,102,241,0.4);
+    opacity: 0; visibility: hidden;
+    transition: all 0.3s; z-index: 999;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .scroll-top.show { opacity: 1; visibility: visible; }
+  .scroll-top:hover {
+    transform: translateY(-5px) scale(1.1);
+    box-shadow: 0 15px 35px rgba(99,102,241,0.6), var(--glow);
+  }
+
+  /* موبایل */
+  @media (max-width: 900px) {
+    .skills-layout { grid-template-columns: 1fr; }
+    .chart-wrapper { height: 350px; }
+  }
+  @media (max-width: 768px) {
+    .nav-links { display: none; }
+    .about-content { grid-template-columns: 1fr; }
+    section { padding: 70px 20px; }
+    .hero { padding: 120px 20px 60px; }
+    .avatar { width: 150px; height: 150px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- نوار پیشرفت اسکرول -->
+<div class="scroll-progress"><div class="scroll-progress-bar" id="progressBar"></div></div>
+
+<!-- ناوبری -->
+<nav>
+  <div class="nav-container">
+    <div class="logo">امیررضا کیانی</div>
+    <ul class="nav-links">
+      <li><a href="#about">درباره من</a></li>
+      <li><a href="#skills">مهارت‌ها</a></li>
+      <li><a href="#services">خدمات</a></li>
+      <li><a href="#projects">پروژه‌ها</a></li>
+      <li><a href="#contact">تماس</a></li>
+    </ul>
+    <button class="theme-toggle" onclick="toggleTheme()" aria-label="تغییر تم">
+      <i class="fas fa-moon"></i>
+    </button>
+  </div>
+</nav>
+
+<!-- هدر -->
+<header class="hero">
+  <div class="hero-bg"><span></span><span></span><span></span></div>
+  <div class="hero-content">
+    <div class="avatar-wrapper">
+      <img src="profile.jpg" alt="امیررضا کیانی" class="avatar">
+    </div>
+    <h1>سلام، من <span class="gradient-text">امیررضا کیانی</span> هستم</h1>
+    <p class="tagline">مهندس برق کنترل | علاقه‌مند به هوش مصنوعی و طراحی</p>
+    <div class="hero-badges">
+      <span class="badge"><i class="fas fa-bolt"></i> مهندسی برق</span>
+      <span class="badge"><i class="fas fa-robot"></i> هوش مصنوعی</span>
+      <span class="badge"><i class="fas fa-palette"></i> طراحی</span>
+      <span class="badge"><i class="fas fa-code"></i> پایتون</span>
+    </div>
+    <div class="hero-buttons">
+      <a href="#contact" class="btn btn-primary">
+        <i class="fas fa-paper-plane"></i> تماس با من
+      </a>
+      <a href="#projects" class="btn btn-outline">
+        <i class="fas fa-briefcase"></i> مشاهده پروژه‌ها
+      </a>
+    </div>
+  </div>
+</header>
+
+<!-- درباره من -->
+<section id="about">
+  <div class="container">
+    <h2 class="section-title">درباره <span class="gradient-text">من</span></h2>
+    <p class="section-subtitle">یه کم درباره خودم بگم</p>
+    <div class="about-content">
+      <div class="about-text">
+        <p>من امیررضا کیانی هستم، مهندس برق گرایش کنترل. توی حوزه‌های مختلفی مثل برنامه‌نویسی پایتون، طراحی با فتوشاپ، کار با نرم‌افزارهای مهندسی برق و نوشتن مقالات و پایان‌نامه فعالیت کردم.</p>
+        <p>عاشق یادگیری چیزهای جدیدم و همیشه دوست دارم بین رشته‌هام پل بزنم — از مهندسی برق تا هوش مصنوعی و طراحی. هدفم اینه که با ترکیب دانش فنی و خلاقیت، چیزهای کاربردی و قشنگ بسازم.</p>
+      </div>
+      <div class="about-stats">
+        <div class="stat-card">
+          <i class="fas fa-layer-group stat-icon"></i>
+          <div class="stat-number" data-target="6">۰</div>
+          <div class="stat-label">حوزه تخصصی</div>
+        </div>
+        <div class="stat-card">
+          <i class="fas fa-calendar-check stat-icon"></i>
+          <div class="stat-number" data-target="3">۰</div>
+          <div class="stat-label">سال تجربه</div>
+        </div>
+        <div class="stat-card">
+          <i class="fas fa-rocket stat-icon"></i>
+          <div class="stat-number" data-target="50">۰</div>
+          <div class="stat-label">پروژه انجام شده</div>
+        </div>
+        <div class="stat-card">
+          <i class="fas fa-brain stat-icon"></i>
+          <div class="stat-number" data-target="100">۰</div>
+          <div class="stat-label">درصد علاقه به یادگیری</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- مهارت‌ها -->
+<section id="skills">
+  <div class="container">
+    <h2 class="section-title">مهارت <span class="gradient-text">ها</span></h2>
+    <p class="section-subtitle">چیزایی که بلدم</p>
+
+    <div class="skills-layout">
+      <div class="skills-list">
+        <div class="skill-item">
+          <div class="skill-header">
+            <span class="skill-name"><i class="fas fa-bolt"></i> مهندسی برق (کنترل)</span>
+            <span class="skill-percent">۸۵٪</span>
+          </div>
+          <div class="skill-bar"><div class="skill-fill" data-width="85%"></div></div>
+        </div>
+
+        <div class="skill-item">
+          <div class="skill-header">
+            <span class="skill-name"><i class="fas fa-microchip"></i> نرم‌افزارهای مهندسی</span>
+            <span class="skill-percent">۸۰٪</span>
+          </div>
+          <div class="skill-bar"><div class="skill-fill" data-width="80%"></div></div>
+        </div>
+
+        <div class="skill-item">
+          <div class="skill-header">
+            <span class="skill-name"><i class="fas fa-pen-fancy"></i> نوشتن مقاله و پایان‌نامه</span>
+            <span class="skill-percent">۸۵٪</span>
+          </div>
+          <div class="skill-bar"><div class="skill-fill" data-width="85%"></div></div>
+        </div>
+
+        <div class="skill-item">
+          <div class="skill-header">
+            <span class="skill-name"><i class="fab fa-python"></i> برنامه‌نویسی پایتون</span>
+            <span class="skill-percent">۷۵٪</span>
+          </div>
+          <div class="skill-bar"><div class="skill-fill" data-width="75%"></div></div>
+        </div>
+
+        <div class="skill-item">
+          <div class="skill-header">
+            <span class="skill-name"><i class="fas fa-robot"></i> هوش مصنوعی</span>
+            <span class="skill-percent">۷۰٪</span>
+          </div>
+          <div class="skill-bar"><div class="skill-fill" data-width="70%"></div></div>
+        </div>
+
+        <div class="skill-item">
+          <div class="skill-header">
+            <span class="skill-name"><i class="fas fa-palette"></i> فتوشاپ</span>
+            <span class="skill-percent">۶۰٪</span>
+          </div>
+          <div class="skill-bar"><div class="skill-fill" data-width="60%"></div></div>
+        </div>
+      </div>
+
+      <div class="chart-wrapper">
+        <canvas id="skillsChart"></canvas>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- خدمات -->
+<section id="services">
+  <div class="container">
+    <h2 class="section-title">خدمات <span class="gradient-text">من</span></h2>
+    <p class="section-subtitle">چیزایی که می‌تونم برات انجام بدم</p>
+    <div class="services-grid">
+
+      <div class="service-card">
+        <div class="service-icon"><i class="fas fa-bolt"></i></div>
+        <h3>طراحی سیستم‌های کنترل</h3>
+        <p>طراحی و شبیه‌سازی سیستم‌های کنترل صنعتی با MATLAB و ارائه راهکار.</p>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon"><i class="fas fa-file-alt"></i></div>
+        <h3>نوشتن مقاله و پایان‌نامه</h3>
+        <p>تدوین، ویرایش و نگارش مقالات علمی و پایان‌نامه در حوزه مهندسی.</p>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon"><i class="fab fa-python"></i></div>
+        <h3>برنامه‌نویسی پایتون</h3>
+        <p>نوشتن اسکریپت‌های کاربردی، اتوماسیون و پروژه‌های پایتون.</p>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon"><i class="fas fa-robot"></i></div>
+        <h3>مشاوره هوش مصنوعی</h3>
+        <p>کمک به استفاده از ابزارهای AI و پیاده‌سازی راهکارهای هوشمند.</p>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon"><i class="fas fa-palette"></i></div>
+        <h3>طراحی گرافیکی</h3>
+        <p>طراحی لوگو، پوستر، بنر و محتوای بصری با فتوشاپ.</p>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon"><i class="fas fa-graduation-cap"></i></div>
+        <h3>آموزش و تدریس</h3>
+        <p>تدریس خصوصی دروس مهندسی برق، پایتون و ابزارهای AI.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- پروژه‌ها -->
+<section id="projects">
+  <div class="container">
+    <h2 class="section-title">پروژه <span class="gradient-text">ها</span></h2>
+    <p class="section-subtitle">بیش از ۵۰ پروژه موفق در حوزه‌های مختلف</p>
+    <div class="projects-grid" id="projectsGrid">
+      <!-- پروژه‌ها با JavaScript اضافه می‌شن -->
+    </div>
+  </div>
+</section>
+
+<!-- تماس -->
+<section id="contact">
+  <div class="container">
+    <h2 class="section-title">راه‌های <span class="gradient-text">ارتباطی</span></h2>
+    <p class="section-subtitle">خوشحال می‌شم باهام در تماس باشی</p>
+    <div class="contact-grid">
+
+      <a href="tel:09374898576" class="contact-card">
+        <div class="contact-icon"><i class="fas fa-phone"></i></div>
+        <h4>تماس</h4>
+        <p>09374898576</p>
+      </a>
+
+      <a href="mailto:amirreki.5685@gmail.com" class="contact-card">
+        <div class="contact-icon"><i class="fas fa-envelope"></i></div>
+        <h4>ایمیل</h4>
+        <p>amirreki.5685@gmail.com</p>
+      </a>
+
+      <a href="https://instagram.com/amireza.raww" target="_blank" class="contact-card">
+        <div class="contact-icon"><i class="fab fa-instagram"></i></div>
+        <h4>اینستاگرام</h4>
+        <p>@amireza.raww</p>
+      </a>
+
+      <a href="https://t.me/lupus_re" target="_blank" class="contact-card">
+        <div class="contact-icon"><i class="fab fa-telegram"></i></div>
+        <h4>تلگرام</h4>
+        <p>@lupus_re</p>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<!-- فوتر -->
+<footer>
+  © ۱۴۰۴ — ساخته شده با <span class="heart">❤</span> توسط امیررضا کیانی
+</footer>
+
+<button class="scroll-top" onclick="window.scrollTo({top:0, behavior:'smooth'})">
+  <i class="fas fa-arrow-up"></i>
+</button>
+
+<script>
+  // ==================== تم ====================
+  function toggleTheme() {
+    const html = document.documentElement;
+    const current = html.getAttribute('data-theme');
+    const next = current === 'dark' ? 'light' : 'dark';
+    html.setAttribute('data-theme', next);
+    const icon = document.querySelector('.theme-toggle i');
+    icon.className = next === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+    localStorage.setItem('theme', next);
+    updateChartColors();
+  }
+
+  const savedTheme = localStorage.getItem('theme') || 'light';
+  document.documentElement.setAttribute('data-theme', savedTheme);
+  document.querySelector('.theme-toggle i').className = savedTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+
+  // ==================== نوار پیشرفت ====================
+  window.addEventListener('scroll', () => {
+    const winScroll = document.documentElement.scrollTop;
+    const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    const scrolled = (winScroll / height) * 100;
+    document.getElementById('progressBar').style.width = scrolled + '%';
+
+    const btn = document.querySelector('.scroll-top');
+    if (window.scrollY > 500) btn.classList.add('show');
+    else btn.classList.remove('show');
+  });
+
+  // ==================== انیمیشن مهارت‌ها ====================
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.querySelectorAll('.skill-fill').forEach(bar => {
+          bar.style.width = bar.dataset.width;
+        });
+      }
+    });
+  }, { threshold: 0.3 });
+  observer.observe(document.querySelector('#skills'));
+
+  // ==================== شمارنده اعداد ====================
+  const counterObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const el = entry.target;
+        const target = parseInt(el.dataset.target);
+        let current = 0;
+        const increment = target / 50;
+        const timer = setInterval(() => {
+          current += increment;
+          if (current >= target) {
+            current = target;
+            clearInterval(timer);
+          }
+          el.textContent = '+' + Math.floor(current).toLocaleString('fa-IR');
+        }, 30);
+        counterObserver.unobserve(el);
+      }
+    });
+  }, { threshold: 0.5 });
+
+  document.querySelectorAll('.stat-number').forEach(el => counterObserver.observe(el));
+
+  // ==================== پروژه‌ها ====================
+  const projects = [
+    { icon: 'fa-graduation-cap', title: 'پروژه پایانی کارشناسی', desc: 'طراحی و شبیه‌سازی سیستم کنترل با MATLAB و تحلیل نتایج.', tags: ['MATLAB', 'کنترل'] },
+    { icon: 'fa-file-alt', title: 'مقاله علمی', desc: 'نوشتن و تدوین مقاله علمی در حوزه مهندسی برق.', tags: ['مقاله', 'پژوهش'] },
+    { icon: 'fa-robot', title: 'پروژه هوش مصنوعی', desc: 'کار با ابزارهای AI و پرامپت‌نویسی حرفه‌ای.', tags: ['AI', 'Prompt'] },
+    { icon: 'fa-bolt', title: 'طراحی مدار الکترونیکی', desc: 'طراحی و شبیه‌سازی مدارهای الکترونیکی صنعتی.', tags: ['الکترونیک', 'شبیه‌سازی'] },
+    { icon: 'fa-microchip', title: 'برنامه‌نویسی PLC', desc: 'برنامه‌نویسی PLC برای سیستم‌های صنعتی.', tags: ['PLC', 'صنعتی'] },
+    { icon: 'fa-chart-line', title: 'تحلیل داده‌های صنعتی', desc: 'تحلیل و مصورسازی داده‌های صنعتی با پایتون.', tags: ['Python', 'Data'] },
+    { icon: 'fa-cogs', title: 'سیستم کنترل هوشمند', desc: 'طراحی سیستم کنترل هوشمند برای ساختمان.', tags: ['کنترل', 'هوشمند'] },
+    { icon: 'fa-paint-brush', title: 'طراحی لوگو', desc: 'طراحی لوگو و هویت بصری برای برندهای مختلف.', tags: ['Photoshop', 'لوگو'] },
+    { icon: 'fa-camera', title: 'پروژه عکاسی صنعتی', desc: 'عکاسی و ویرایش تصاویر محصولات صنعتی.', tags: ['عکاسی', 'ویرایش'] },
+    { icon: 'fa-server', title: 'سیستم SCADA', desc: 'طراحی و پیاده‌سازی سیستم SCADA صنعتی.', tags: ['SCADA', 'صنعتی'] },
+    { icon: 'fa-solar-panel', title: 'انرژی‌های تجدیدپذیر', desc: 'طراحی سیستم برق خورشیدی برای منازل.', tags: ['خورشیدی', 'انرژی'] },
+    { icon: 'fa-network-wired', title: 'شبکه صنعتی', desc: 'راه‌اندازی و پیکربندی شبکه‌های صنعتی.', tags: ['شبکه', 'صنعتی'] },
+    { icon: 'fa-brain', title: 'شبکه عصبی', desc: 'پیاده‌سازی شبکه‌های عصبی با پایتون.', tags: ['AI', 'Python'] },
+    { icon: 'fa-drafting-compass', title: 'طراحی صنعتی', desc: 'طراحی قطعات صنعتی با نرم‌افزارهای CAD.', tags: ['CAD', 'طراحی'] },
+    { icon: 'fa-database', title: 'پایگاه داده', desc: 'طراحی و مدیریت پایگاه داده صنعتی.', tags: ['Database', 'SQL'] },
+    { icon: 'fa-mobile-alt', title: 'اپلیکیشن موبایل', desc: 'طراحی UI اپلیکیشن موبایل صنعتی.', tags: ['UI', 'موبایل'] },
+    { icon: 'fa-globe', title: 'وب اپلیکیشن', desc: 'طراحی و توسعه وب اپلیکیشن مهندسی.', tags: ['Web', 'HTML'] },
+    { icon: 'fa-video', title: 'تیزر تبلیغاتی', desc: 'ساخت تیزر موشن گرافیک برای محصولات.', tags: ['موشن', 'ویدیو'] },
+    { icon: 'fa-print', title: 'طراحی کاتالوگ', desc: 'طراحی کاتالوگ و بروشور محصولات صنعتی.', tags: ['چاپ', 'طراحی'] },
+    { icon: 'fa-tools', title: 'تعمیرات تجهیزات', desc: 'تعمیر و نگهداری تجهیزات برقی صنعتی.', tags: ['تعمیرات', 'برق'] },
+    { icon: 'fa-wave-square', title: 'پردازش سیگنال', desc: 'پردازش و تحلیل سیگنال‌های دیجیتال.', tags: ['سیگنال', 'MATLAB'] },
+    { icon: 'fa-shield-alt', title: 'سیستم امنیتی', desc: 'طراحی سیستم امنیتی و دوربین مداربسته.', tags: ['امنیت', 'دوربین'] },
+    { icon: 'fa-lightbulb', title: 'روشنایی هوشمند', desc: 'طراحی سیستم روشنایی هوشمند ساختمان.', tags: ['هوشمند', 'روشنایی'] },
+    { icon: 'fa-thermometer-half', title: 'سیستم تهویه', desc: 'طراحی سیستم کنترل دما و تهویه.', tags: ['HVAC', 'کنترل'] },
+    { icon: 'fa-battery-full', title: 'مدیریت باتری', desc: 'طراحی سیستم مدیریت باتری BMS.', tags: ['باتری', 'BMS'] },
+    { icon: 'fa-industry', title: 'اتوماسیون صنعتی', desc: 'طراحی خط اتوماسیون صنعتی کامل.', tags: ['اتوماسیون', 'صنعتی'] },
+    { icon: 'fa-broadcast-tower', title: 'مخابرات', desc: 'طراحی و تحلیل سیستم‌های مخابراتی.', tags: ['مخابرات', 'شبکه'] },
+    { icon: 'fa-satellite', title: 'سیستم GPS', desc: 'پیاده‌سازی سیستم مکان‌یابی GPS.', tags: ['GPS', 'مکان‌یابی'] },
+    { icon: 'fa-drone', title: 'کنترل پهپاد', desc: 'طراحی سیستم کنترل پهپاد.', tags: ['پهپاد', 'کنترل'] },
+    { icon: 'fa-car', title: 'سیستم خودرو', desc: 'طراحی سیستم الکترونیکی خودرو.', tags: ['خودرو', 'الکترونیک'] },
+    { icon: 'fa-heartbeat', title: 'تجهیزات پزشکی', desc: 'طراحی تجهیزات الکترونیکی پزشکی.', tags: ['پزشکی', 'الکترونیک'] },
+    { icon: 'fa-flask', title: 'پروژه تحقیقاتی', desc: 'پروژه تحقیقاتی در حوزه کنترل هوشمند.', tags: ['تحقیق', 'کنترل'] },
+    { icon: 'fa-cube', title: 'مدل‌سازی 3D', desc: 'مدل‌سازی سه‌بعدی قطعات صنعتی.', tags: ['3D', 'مدل‌سازی'] },
+    { icon: 'fa-project-diagram', title: 'فلوچارت صنعتی', desc: 'طراحی فلوچارت فرآیندهای صنعتی.', tags: ['فلوچارت', 'صنعتی'] },
+    { icon: 'fa-calculator', title: 'محاسبات مهندسی', desc: 'انجام محاسبات دقیق مهندسی برق.', tags: ['محاسبات', 'مهندسی'] },
+    { icon: 'fa-clipboard-check', title: 'مستندسازی فنی', desc: 'تهیه مستندات فنی پروژه‌های صنعتی.', tags: ['مستند', 'فنی'] },
+    { icon: 'fa-chalkboard-teacher', title: 'دوره آموزشی', desc: 'تولید محتوای آموزشی مهندسی برق.', tags: ['آموزش', 'محتوا'] },
+    { icon: 'fa-headset', title: 'پشتیبانی فنی', desc: 'ارائه پشتیبانی فنی پروژه‌های صنعتی.', tags: ['پشتیبانی', 'فنی'] },
+    { icon: 'fa-chart-pie', title: 'گزارش تحلیلی', desc: 'تهیه گزارش‌های تحلیلی از داده‌های صنعتی.', tags: ['تحلیل', 'گزارش'] },
+    { icon: 'fa-cube', title: 'شبیه‌سازی سیستم', desc: 'شبیه‌سازی سیستم‌های دینامیکی پیچیده.', tags: ['شبیه‌سازی', 'دینامیک'] },
+    { icon: 'fa-route', title: 'بهینه‌سازی مسیر', desc: 'الگوریتم‌های بهینه‌سازی مسیر ربات.', tags: ['بهینه‌سازی', 'ربات'] },
+    { icon: 'fa-eye', title: 'بینایی ماشین', desc: 'پیاده‌سازی الگوریتم‌های بینایی ماشین.', tags: ['AI', 'بینایی'] },
+    { icon: 'fa-comments', title: 'چت‌بات هوشمند', desc: 'طراحی چت‌بات با هوش مصنوعی.', tags: ['AI', 'چت‌بات'] },
+    { icon: 'fa-image', title: 'پردازش تصویر', desc: 'پردازش و تحلیل تصاویر دیجیتال.', tags: ['تصویر', 'Python'] },
+    { icon: 'fa-microphone', title: 'پردازش صدا', desc: 'تحلیل و پردازش سیگنال‌های صوتی.', tags: ['صدا', 'سیگنال'] },
+    { icon: 'fa-language', title: 'پردازش زبان', desc: 'پروژه‌های NLP و پردازش زبان طبیعی.', tags: ['NLP', 'AI'] },
+    { icon: 'fa-cloud', title: 'رایانش ابری', desc: 'پیاده‌سازی سرویس‌های ابری برای پروژه‌ها.', tags: ['Cloud', 'Server'] },
+    { icon: 'fa-lock', title: 'امنیت شبکه', desc: 'پیاده‌سازی راهکارهای امنیت شبکه.', tags: ['امنیت', 'شبکه'] },
+    { icon: 'fa-magic', title: 'اتوماسیون اداری', desc: 'اتوماسیون فرآیندهای اداری با پایتون.', tags: ['اتوماسیون', 'Python'] },
+    { icon: 'fa-star', title: 'پروژه ویژه', desc: 'پروژه ویژه و منحصربفرد در حوزه مهندسی.', tags: ['ویژه', 'مهندسی'] },
+    { icon: 'fa-trophy', title: 'پروژه برگزیده', desc: 'پروژه برگزیده در جشنواره مهندسی برق.', tags: ['برگزیده', 'جشنواره'] }
+  ];
+
+  const grid = document.getElementById('projectsGrid');
+  projects.forEach((p, i) => {
+    const card = document.createElement('a');
+    card.href = '#';
+    card.className = 'project-card';
+    card.style.animationDelay = (i * 0.05) + 's';
+    card.innerHTML = `
+      <div class="project-image">
+        <i class="fas ${p.icon}"></i>
+      </div>
+      <div class="project-arrow"><i class="fas fa-arrow-left"></i></div>
+      <div class="project-body">
+        <h3>${p.title}</h3>
+        <p>${p.desc}</p>
+        <div class="project-tags">
+          ${p.tags.map(t => `<span class="tag">${t}</span>`).join('')}
+        </div>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+
+  // ==================== نمودار ====================
+  let skillsChart;
+
+  function getChartColors() {
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    return {
+      text: isDark ? '#f1f5f9' : '#0f172a',
+      grid: isDark ? 'rgba(241,245,249,0.1)' : 'rgba(15,23,42,0.08)'
+    };
+  }
+
+  function initChart() {
+    const ctx = document.getElementById('skillsChart').getContext('2d');
+    const colors = getChartColors();
+
+    skillsChart = new Chart(ctx, {
+      type: 'radar',
+      data: {
+        labels: ['مهندسی برق', 'نرم‌افزار مهندسی', 'مقاله‌نویسی', 'پایتون', 'هوش مصنوعی', 'فتوشاپ'],
+        datasets: [{
+          label: 'سطح مهارت',
+          data: [85, 80, 85, 75, 70, 60],
+          backgroundColor: 'rgba(99,102,241,0.25)',
+          borderColor: '#6366f1',
+          borderWidth: 2.5,
+          pointBackgroundColor: '#ec4899',
+          pointBorderColor: '#fff',
+          pointBorderWidth: 2,
+          pointRadius: 6,
+          pointHoverRadius: 9
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            labels: {
+              color: colors.text,
+              font: { family: 'Estedad', size: 13, weight: '600' }
+            }
+          },
+          tooltip: {
+            backgroundColor: 'rgba(15,23,42,0.95)',
+            titleFont: { family: 'Estedad', size: 14 },
+            bodyFont: { family: 'Estedad', size: 13 },
+            padding: 12,
+            cornerRadius: 10,
+            callbacks: {
+              label: function(context) {
+                return context.parsed.r + '٪';
+              }
+            }
+          }
+        },
+        scales: {
+          r: {
+            beginAtZero: true, max: 100,
+            ticks: {
+              stepSize: 20, color: colors.text,
+              font: { family: 'Estedad', size: 11 },
+              backdropColor: 'transparent'
+            },
+            grid: { color: colors.grid },
+            angleLines: { color: colors.grid },
+            pointLabels: {
+              color: colors.text,
+              font: { family: 'Estedad', size: 12, weight: '600' }
+            }
+          }
+        }
+      }
+    });
+  }
+
+  function updateChartColors() {
+    if (!skillsChart) return;
+    const colors = getChartColors();
+    skillsChart.options.plugins.legend.labels.color = colors.text;
+    skillsChart.options.scales.r.ticks.color = colors.text;
+    skillsChart.options.scales.r.grid.color = colors.grid;
+    skillsChart.options.scales.r.angleLines.color = colors.grid;
+    skillsChart.options.scales.r.pointLabels.color = colors.text;
+    skillsChart.update();
+  }
+
+  initChart();
+</script>
+
+</body>
+</html>
